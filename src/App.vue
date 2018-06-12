@@ -29,7 +29,6 @@ export default {
       const dataSourse = response.data;
       if (dataSourse.code == 0) {
           that.poiInfo = dataSourse.data.poi_info;
-          console.log(that.poiInfo);
       }
     })
     .catch(function(error) {

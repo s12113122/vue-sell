@@ -26,8 +26,11 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
-    }
+      '@': resolve('src'), 
+      // 導入時路徑
+      'components': resolve('src/components'),
+    },
+
   },
   module: {
     rules: [
