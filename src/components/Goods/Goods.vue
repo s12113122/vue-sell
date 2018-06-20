@@ -16,6 +16,7 @@
             <img :src="item.icon" alt="" v-if="item.icon" class="icon">
             {{item.name}}
           </p>
+          <i class="num" v-show="calculateCount(item.spus)">{{calculateCount(item.spus)}}</i>
         </li>
       </ul>
     </div>
@@ -45,29 +46,41 @@
                 <img class="product" :src="food.product_label_picture" alt="">
                 <p class="price">
                   <span class="text">${{food.min_price}}</span>
-                  <span class="unit">/{{food.unit}}</span>                  
+                  <span class="unit">/{{food.unit}}</span>
                 </p>
+                <div class="cartcontrol-wrapper">
+                  <Cartcontrol :food="food"></Cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
+    <shopcart :poiInfo="poiInfo" :selectFoods="selectFoods"></shopcart>
   </div>
 </template>
 <script>
 // 導入
 import BScroll from 'better-scroll'
+import Shopcart from 'components/Shopcart/Shopcart'
+import Cartcontrol from 'components/Cartcontrol/Cartcontrol'
 export default {
   data() {
     return {
       container:{},
       goods:[],
+      poiInfo: {},
       listHeight:[],
       scrollY:0,
       menuScroll:{},
       foodScroll:{},
     }
+  },
+  components: {
+    Shopcart,
+    BScroll,
+    Cartcontrol,
   },
   methods:{
     head_bg(imgName){
@@ -79,9 +92,11 @@ export default {
       this.menuScroll = new BScroll(this.$refs.menuScroll,{
         click:true
       });
+      console.log('this.menuScroll', this.menuScroll);
       this.foodScroll = new BScroll(this.$refs.foodScroll,{
-        probeType:3
-      });  
+        probeType:3,
+        click:true
+      });
 
       // 添加滾動監聽事件
       this.foodScroll.on('scroll', (pos) => {
@@ -104,11 +119,20 @@ export default {
       }
     },
     selectMenu(index) {
-      let foodlist = this.$refs.foodScroll.getElementsByClassName('food-list-hook');      
+      let foodlist = this.$refs.foodScroll.getElementsByClassName('food-list-hook');
       // 根據下標 滾動到相對應的位子
       let el = foodlist[index];
       // 滾動到位置
       this.foodScroll.scrollToElement(el,300);
+    },
+    calculateCount(spus){
+      let count = 0;
+      spus.forEach((food) => {
+        if (food.count> 0){
+          count +=food.count;
+        }
+      });
+      return count;
     }
   },
   created() {
@@ -119,6 +143,7 @@ export default {
       if (dataSourse.code == 0) {
           that.container = dataSourse.data.container_operation_source;
           that.goods = dataSourse.data.food_spu_tags;
+          that.poiInfo = dataSourse.data.poi_info;
           // 調用滾動初始化
           // that.initScroll();
           // 開始時，DOM元素沒有渲染，高度是問題
@@ -126,7 +151,7 @@ export default {
           // 使用 nextTick
           that.$nextTick( ()=> {
             that.initScroll();
-            
+
             // 計算分類區間高度
             that.calculateHeight();
           });
@@ -147,7 +172,18 @@ export default {
         }
       }
       return 0 ;
-    }
+    },
+    selectFoods() {
+      let foods = [] ;
+      this.goods.forEach((good)=> {
+        good.spus.forEach((food)=> {
+          if (food.count>0) {
+            foods.push(food);
+          }
+        })
+      });
+      return foods;
+    },
   },
 }
 </script>

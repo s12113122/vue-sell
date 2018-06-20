@@ -17,6 +17,7 @@
 .goods .menu-wrapper .menu-item{
   padding: 16px 22px 15px 10px;
   border-bottom: 1px solid #E4E4E4;
+  position: relative;
 }
 .goods .menu-wrapper .menu-item.current{
   background: white;
@@ -28,7 +29,7 @@
   color: #333333;
   line-height: 17px;
   vertical-align: middle;
-  
+
   /* 多顯行顯示省略號 */
   -webkit-line-clamp:2;
   /* 必須 對象作為彈性盒子 */
@@ -42,10 +43,23 @@
   height: 15px;
   vertical-align: middle;
 }
+.goods .menu-wrapper .menu-item .num {
+  position: absolute;
+  right: 5px;
+  top:5px;
+  width: 13px;
+  height: 13px;
+  color: white;
+  border-radius: 50%;
+  background-color: red;
+  text-align: center;
+  font-size: 7px;
+  line-height: 13px;
+}
 .goods .foods-wrapper {
   flex: 1;
   /* background-color: #E4E4E4; */
-  
+
 }
 
 .goods .foods-wrapper .container-list{
@@ -71,6 +85,7 @@
 .goods .foods-wrapper .food-list .food-item{
   display: flex;
   margin-bottom: 25px;
+  position: relative;
 }
 .goods .foods-wrapper .food-list .food-item .icon{
   flex: 0 0 63px;
@@ -85,7 +100,7 @@
 }
 
 .goods .foods-wrapper .food-list .food-item .content .name{
-  font-size: 16px; 
+  font-size: 16px;
   line-height: 21px;
   color: #333333;
   margin-bottom: 10px;
@@ -125,4 +140,10 @@
 .goods .foods-wrapper .food-list .food-item .content .price .unit{
   font-size: 12px;
   color: #bfbfbf;
+}
+
+.goods .foods-wrapper .food-list .food-item .cartcontrol-wrapper{
+  position: absolute;
+  right: 0;
+  bottom:0;
 }
