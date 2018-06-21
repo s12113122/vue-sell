@@ -1,7 +1,7 @@
 <template>
   <div class="shopcart" :class="{'highligh': totalCount > 0}">
     <div class="content-left">
-      <div class="logo-wrapper" :class="{'highligh': totalCount > 0}">
+      <div class="logo-wrapper" :class="{'highligh': totalCount > 0}" @click="toggleList">
         <span class="icon-shopping_cart logo" :class="{'highligh': totalCount > 0}"></span>
         <i class="num" v-show="totalCount">{{totalCount}}</i>
       </div>
@@ -13,8 +13,9 @@
     <div class="content-right" :class="{'highligh': totalCount > 0}">
       {{payStr}}
     </div>
-    <div class="shopcart-list">
+    <div class="shopcart-list" v-show="listShow" :class="{ 'show' : listShow}">
       <div class="list-top" v-if="poiInfo.discounts2">
+
         {{poiInfo.discounts2[0].info}}
       </div>
       <div class="list-header">
@@ -52,6 +53,12 @@
   import  Cartcontrol from 'components/Cartcontrol/Cartcontrol'
 
   export default {
+    data () {
+      return {
+        fold:true,
+      }
+
+    },
     props:['MinPriceTip', 'shipping'],
     props:{
       shipping:{
@@ -79,6 +86,14 @@
         }
       }
     },
+    methods: {
+      toggleList() {
+        if(!this.totalCount) {
+          return;
+        }
+        this.fold = !this.fold;
+      }
+    },
     computed:{
       totalCount() {
         let num = 0;
@@ -100,11 +115,14 @@
         } else {
           return this.poiInfo.MinPriceTip
         }
-      }
-    },
-    data(){
-      return {
-
+      },
+      listShow(){
+        if (!this.totalCount) {
+          this.fold = true;
+          return false ;
+        }
+        let show = !this.fold;
+        return show;
       }
     },
     components:{
